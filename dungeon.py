@@ -2,11 +2,18 @@ import random
 
 hero = "@"
 hero_x = 0
-level = "..a.b..p..b..$..r.$...P...S...."
+level = "..a.b..p..b..$..r.$.h..c...S...."
 level = list(level)
 hunger = 0
 money = 0
 hp=10
+#        key :   name   hunger hp
+food = {"a":("apple",5,0),
+        "b":("banana",6,2),
+        "p":("pork",9,0),
+        "r":("rotten meat",4,-2),
+        "c":("cake",17,0),
+        "h":("big health potion",0,42)}
 while hp > 0:
     for x, char in enumerate(level):
         if x == hero_x:
@@ -15,7 +22,7 @@ while hp > 0:
             print(char, end="")
     print()
     hunger += 1
-    command=input("Hunger: {} Money: {} ,your command?".format(hunger, money))
+    command=input("Hunger: {} Money: {} HP: {},your command?".format(hunger, money, hp))
     if command == "quit" or command == "exit":
         break
     elif command == "a":
@@ -33,28 +40,13 @@ while hp > 0:
     elif command == "randomjump":
         hero_x = random.randint(-10, 10)
     # ----------Auswertung----------
-    if level[hero_x] == "a":
-        print("You eat an apple.")
-        hunger -= 5
+    stuff = level[hero_x]
+    if stuff in food:
+        print("You eat : ", food[stuff][0])
+        hunger -= food[stuff][1]
+        hp += food[stuff][2]
         level[hero_x] = "."
-    elif level[hero_x] == "b":
-        print("You eat a banana.")
-        hunger -= 6
-        level[hero_x] = "."
-    elif level[hero_x] == "p":
-        print("Such a good pork.")
-        hunger -= 9
-        level[hero_x] = "."
-    elif level[hero_x] == "P":
-        print("Yummy pie!")
-        hunger -= 17
-        level[hero_x] = "."
-    elif level[hero_x] == "r":
-        print("Bäh! Rotten meat!")
-        hunger -= 4
-        hp -= 2
-        level[hero_x] = "."
-    elif level[hero_x] == "$":
+    elif stuff == "$":
         print("You found money!")
         money += random.randint(1, 20)
         level[hero_x] = "."
